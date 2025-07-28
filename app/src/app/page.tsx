@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import styles from "./tictactoe.module.css";
 
 const WIN_PATTERNS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
@@ -56,11 +57,11 @@ export default function TicTacToe() {
   };
 
   const resetGame = () => {
+    setWinningPattern(null);
+    setWinner(null);
+    setGameStatus("playing");
     setBoard(Array(9).fill(null));
     setCurrentPlayer("X");
-    setGameStatus("playing");
-    setWinner(null);
-    setWinningPattern(null);
   };
 
   const resetScores = () => {
@@ -68,80 +69,53 @@ export default function TicTacToe() {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "20px",
-      fontFamily: "system-ui, -apple-system, sans-serif"
-    }}>
+    <div className={styles.container}>
       {gameStatus === "won" && (
-        <Confetti width={width} height={height} numberOfPieces={250} recycle={false} />
+        <Confetti 
+          width={width} 
+          height={height} 
+          numberOfPieces={250} 
+          recycle={false} 
+        />
       )}
-      <div style={{
-        background: "white",
-        borderRadius: "16px",
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-        padding: "32px",
-        maxWidth: "400px",
-        width: "100%"
-      }}>
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <h1 style={{ 
-            fontSize: "32px", 
-            fontWeight: "bold", 
-            color: "#1f2937", 
-            marginBottom: "16px",
-            margin: "0 0 16px 0"
-          }}>
-            Tic Tac Toe
-          </h1>
+      
+      <div className={styles.gameCard}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Tic Tac Toe</h1>
           
-          {/* Scores */}
-          <div style={{ 
-            display: "flex", 
-            justifyContent: "center", 
-            gap: "24px", 
-            marginBottom: "16px" 
-          }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#ef4444" }}>
+          <div className={styles.scores}>
+            <div className={styles.scoreItem}>
+              <div className={`${styles.scoreNumber} ${styles.scoreNumberX}`}>
                 {scores.X}
               </div>
-              <div style={{ fontSize: "14px", color: "#6b7280" }}>X</div>
+              <div className={styles.scoreLabel}>X</div>
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#6b7280" }}>
+            <div className={styles.scoreItem}>
+              <div className={`${styles.scoreNumber} ${styles.scoreNumberDraw}`}>
                 {scores.draws}
               </div>
-              <div style={{ fontSize: "14px", color: "#6b7280" }}>Draws</div>
+              <div className={styles.scoreLabel}>Draws</div>
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "24px", fontWeight: "bold", color: "#3b82f6" }}>
+            <div className={styles.scoreItem}>
+              <div className={`${styles.scoreNumber} ${styles.scoreNumberO}`}>
                 {scores.O}
               </div>
-              <div style={{ fontSize: "14px", color: "#6b7280" }}>O</div>
+              <div className={styles.scoreLabel}>O</div>
             </div>
           </div>
 
-          {/* Game Status */}
           <AnimatePresence mode="wait">
             {gameStatus === "playing" && (
               <motion.div
                 key="playing"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                style={{ fontSize: "18px", color: "#374751" }}
+                exit={{ opacity: 0, y: 20 }}
+                className={styles.status}
               >
-                Player{" "}
-                <span style={{ color: currentPlayer === "X" ? "#ef4444" : "#3b82f6" }}>
-                  {currentPlayer}
-                </span>{" "}
-                turn
+                <span className={currentPlayer === "X" ? styles.playerX : styles.playerO}>
+                  Player {currentPlayer}
+                </span>'s turn
               </motion.div>
             )}
             
@@ -151,69 +125,63 @@ export default function TicTacToe() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                style={{ fontSize: "20px", fontWeight: "bold" }}
+                className={`${styles.status} ${styles.statusWon}`}
               >
-                🎉{" "}
-                <span style={{ color: winner === "X" ? "#ef4444" : "#3b82f6" }}>
+                <motion.span
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 0.5, repeat: 3 }}
+                  className={styles.emoji}
+                >
+                  🎉
+                </motion.span>
+                <span className={winner === "X" ? styles.playerX : styles.playerO}>
                   Player {winner}
-                </span>{" "}
-                wins!
+                </span> wins!
               </motion.div>
             )}
-            
+
             {gameStatus === "draw" && (
               <motion.div
                 key="draw"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                style={{ fontSize: "20px", fontWeight: "bold", color: "#6b7280" }}
+                className={`${styles.status} ${styles.statusDraw}`}
               >
-                🤝 It's a draw!
+                <span className={styles.emoji}>🤝</span>
+                It's a draw!
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Game Board */}
-        <div style={{ position: "relative", marginBottom: "32px" }}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "8px",
-            backgroundColor: "#e5e7eb",
-            padding: "8px",
-            borderRadius: "12px",
-            margin: "0 auto",
-            width: "fit-content"
-          }}>
+        <div className={styles.board}>
+          <div className={styles.boardGrid}>
             {board.map((cell, index) => (
               <motion.button
                 key={index}
                 onClick={() => handleCellClick(index)}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  backgroundColor: winningPattern?.includes(index) ? "#fef2f2" : "white",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "36px",
-                  fontWeight: "bold",
-                  border: "none",
-                  cursor: !cell && gameStatus === "playing" ? "pointer" : "default",
-                  transition: "all 0.2s"
-                }}
+                className={`
+                  ${styles.cell}
+                  ${winningPattern?.includes(index) && gameStatus === "won" ? styles.cellWinning : ''}
+                  ${!cell && gameStatus === "playing" ? styles.cellPlaying : ''}
+                `}
+                disabled={!!cell || gameStatus !== "playing"}
                 whileHover={!cell && gameStatus === "playing" ? { scale: 1.02 } : {}}
                 whileTap={!cell && gameStatus === "playing" ? { scale: 0.98 } : {}}
-                animate={winningPattern?.includes(index) ? { scale: [1, 1.02, 1], boxShadow: [
-                  "0 4px 6px -1px rgba(0,0,0,0.1)",
-                  "0 0px 24px 2px #fca5a5",
-                  "0 4px 6px -1px rgba(0,0,0,0.1)"
-                ] } : {}}
-                transition={winningPattern?.includes(index) ? { repeat: Infinity, duration: 0.8, ease: "easeInOut" } : {}}
+                animate={winningPattern?.includes(index) ? { 
+                  scale: [1, 1.02, 1], 
+                  boxShadow: [
+                    "0 4px 6px -1px rgba(0,0,0,0.1)",
+                    "0 0px 24px 2px #fca5a5",
+                    "0 4px 6px -1px rgba(0,0,0,0.1)"
+                  ] 
+                } : {}}
+                transition={winningPattern?.includes(index) ? { 
+                  repeat: Infinity, 
+                  duration: 0.8, 
+                  ease: "easeInOut" 
+                } : {}}
               >
                 <AnimatePresence>
                   {cell && (
@@ -226,7 +194,7 @@ export default function TicTacToe() {
                         stiffness: 200, 
                         damping: 15 
                       }}
-                      style={{ color: cell === "X" ? "#ef4444" : "#3b82f6" }}
+                      className={`${styles.cellContent} ${cell === "X" ? styles.playerX : styles.playerO}`}
                     >
                       {cell}
                     </motion.span>
@@ -237,22 +205,11 @@ export default function TicTacToe() {
           </div>
         </div>
 
-        {/* Buttons */}
-        <div style={{ display: "flex", gap: "12px" }}>
+        <div className={styles.buttons}>
           <motion.button
             onClick={resetGame}
-            style={{
-              flex: 1,
-              backgroundColor: "#6366f1",
-              color: "white",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              fontWeight: "600",
-              border: "none",
-              cursor: "pointer",
-              transition: "background-color 0.2s"
-            }}
-            whileHover={{ scale: 1.02, backgroundColor: "#5856eb" }}
+            className={`${styles.button} ${styles.buttonPrimary}`}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
             New Game
@@ -260,17 +217,8 @@ export default function TicTacToe() {
           
           <motion.button
             onClick={resetScores}
-            style={{
-              backgroundColor: "#6b7280",
-              color: "white",
-              padding: "12px 16px",
-              borderRadius: "8px",
-              fontWeight: "600",
-              border: "none",
-              cursor: "pointer",
-              transition: "background-color 0.2s"
-            }}
-            whileHover={{ scale: 1.02, backgroundColor: "#565961" }}
+            className={`${styles.button} ${styles.buttonSecondary}`}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
             Reset Scores
