@@ -115,7 +115,7 @@ export default function TicTacToe() {
               >
                 <span className={currentPlayer === "X" ? styles.playerX : styles.playerO}>
                   Player {currentPlayer}
-                </span>'s turn
+                </span>&apos;s turn
               </motion.div>
             )}
             
@@ -149,7 +149,7 @@ export default function TicTacToe() {
                 className={`${styles.status} ${styles.statusDraw}`}
               >
                 <span className={styles.emoji}>🤝</span>
-                It's a draw!
+                It&apos;s a draw!
               </motion.div>
             )}
           </AnimatePresence>
