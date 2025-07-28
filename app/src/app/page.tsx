@@ -159,7 +159,7 @@ export default function TicTacToe() {
           <div className={styles.boardGrid}>
             {board.map((cell, index) => (
               <motion.button
-                key={index}
+                key={`${index}-${gameStatus}-${winningPattern?.join(',') || 'none'}`}
                 onClick={() => handleCellClick(index)}
                 className={`
                   ${styles.cell}
@@ -176,12 +176,18 @@ export default function TicTacToe() {
                     "0 0px 24px 2px #fca5a5",
                     "0 4px 6px -1px rgba(0,0,0,0.1)"
                   ] 
-                } : {}}
+                } : {
+                  scale: 1,
+                  boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)"
+                }}
                 transition={winningPattern?.includes(index) && gameStatus === "won" ? { 
                   repeat: Infinity, 
                   duration: 0.8, 
                   ease: "easeInOut" 
-                } : {}}
+                } : {
+                  duration: 0.2,
+                  ease: "easeOut"
+                }}
               >
                 <AnimatePresence>
                   {cell && (
