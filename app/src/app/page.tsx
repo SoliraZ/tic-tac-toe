@@ -90,6 +90,7 @@ export default function Home() {
               fontSize: 120,
               userSelect: "none",
               zIndex: 1,
+              position: "relative",
             }}
           >
             {val === "X" && (
@@ -112,6 +113,16 @@ export default function Home() {
                 ○
               </motion.span>
             )}
+            {/* Index in bottom-right */}
+            <span style={{
+              position: "absolute",
+              bottom: 8,
+              right: 12,
+              fontSize: 20,
+              color: "#bbb",
+              pointerEvents: "none",
+              fontFamily: "monospace"
+            }}>{idx}</span>
           </div>
         ))}
       </div>
