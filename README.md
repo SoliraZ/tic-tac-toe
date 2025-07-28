@@ -12,6 +12,10 @@ A modern, interactive Tic Tac Toe game built with React, TypeScript, and Framer 
 - **Animations**: Smooth transitions and hover effects using Framer Motion
 - **Confetti Celebration**: Confetti animation when a player wins
 
+### 🚧 Upcoming Features
+
+- **Bot Mode**: Play against an AI opponent with different difficulty levels
+
 ## 🛠️ Technologies Used
 
 - **React 18** - Frontend framework
