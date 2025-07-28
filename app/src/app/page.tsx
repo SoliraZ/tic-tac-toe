@@ -169,7 +169,7 @@ export default function TicTacToe() {
                 disabled={!!cell || gameStatus !== "playing"}
                 whileHover={!cell && gameStatus === "playing" ? { scale: 1.02 } : {}}
                 whileTap={!cell && gameStatus === "playing" ? { scale: 0.98 } : {}}
-                animate={winningPattern?.includes(index) ? { 
+                animate={winningPattern?.includes(index) && gameStatus === "won" ? { 
                   scale: [1, 1.02, 1], 
                   boxShadow: [
                     "0 4px 6px -1px rgba(0,0,0,0.1)",
@@ -177,7 +177,7 @@ export default function TicTacToe() {
                     "0 4px 6px -1px rgba(0,0,0,0.1)"
                   ] 
                 } : {}}
-                transition={winningPattern?.includes(index) ? { 
+                transition={winningPattern?.includes(index) && gameStatus === "won" ? { 
                   repeat: Infinity, 
                   duration: 0.8, 
                   ease: "easeInOut" 
