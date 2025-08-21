@@ -6,7 +6,7 @@ import styles from "./home.module.css";
 import TicTacToeGame from "./components/TicTacToeGame";
 
 export default function HomePage() {
-  const [selectedMode, setSelectedMode] = useState<string | null>(null);
+  const [selectedMode, setSelectedMode] = useState<"pvp" | "pve" | null>(null);
 
   const gameModes = [
     {
@@ -14,22 +14,22 @@ export default function HomePage() {
       title: "Player vs Player",
       description: "Play against a friend on the same device",
       icon: "👥",
-      color: "#3b82f6"
+      color: "#3b82f6",
     },
     {
       id: "pve",
       title: "Player vs Bot",
       description: "Challenge our AI opponent",
       icon: "🤖",
-      color: "#ef4444"
-    }
-  ];
+      color: "#ef4444",
+    },
+  ] as const;
 
   if (selectedMode) {
     return (
-      <TicTacToeGame 
-        mode={selectedMode} 
-        onBackToMenu={() => setSelectedMode(null)} 
+      <TicTacToeGame
+        mode={selectedMode}
+        onBackToMenu={() => setSelectedMode(null)}
       />
     );
   }
@@ -59,7 +59,7 @@ export default function HomePage() {
               whileHover={{ scale: 1.02, y: -5 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div 
+              <div
                 className={styles.modeIcon}
                 style={{ backgroundColor: mode.color }}
               >
